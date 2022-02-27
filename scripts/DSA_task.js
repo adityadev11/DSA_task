@@ -1,5 +1,6 @@
 const hre = require("hardhat");
 const Web3 = require("web3");
+const { ethers } = require("hardhat");
 const DSA = require("dsa-connect");
 const axios = require("axios");
 require("dotenv").config();
@@ -18,11 +19,13 @@ const dsa = new DSA({
   mode: "node",
   privateKey: PRIVATE_KEY,
 });
-my_address = "0x57A8C355790AEe45341f738C8Fb3a35475C86D51";
-network.provider.send("hardhat_setBalance", [
-  my_address,
-  ethers.utils.parseEther("10.0").toHexString(),
-]);
+
+const my_address = "0x57A8C355790AEe45341f738C8Fb3a35475C86D51";
+
+// network.provider.send("hardhat_setBalance", [
+//   my_address,
+//   ethers.utils.parseEther("10.0").toHexString(),
+// ]);
 
 async function getCurrentGasPrices() {
   let response = await axios.get(
@@ -42,6 +45,18 @@ async function getCurrentGasPrices() {
   return prices;
 }
 async function Build() {
+  await hre.network.provider.send("hardhat_setBalance", [
+    my_address,
+    ethers.utils.parseEther("10.0").toHexString(),
+  ]);
+  //console.log(web3.fromWei(web3.utils.eth.getBalance(my_address)));
+  await web3.eth.getBalance(my_address, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(web3.utils.fromWei(result, "ether") + " ETH");
+    }
+  });
   const Prices = await getCurrentGasPrices();
   const Gas = Prices.low;
   console.log(Gas);
