@@ -1,5 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
-
+require("@nomiclabs/hardhat-web3");
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -23,8 +23,9 @@ module.exports = {
     hardhat: {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${apiKey}`, //Mainnet Forking
-        blockNumber: 14288264,
+        blockNumber: 14290999,
       },
+      chainId: 1,
     },
   },
   mocha: {

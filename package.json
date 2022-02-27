@@ -26,6 +26,7 @@
     "hardhat": "^2.8.4"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-web3": "^2.0.0",
     "axios": "^0.26.0",
     "dotenv": "^16.0.0",
     "dsa-connect": "^0.6.3",
