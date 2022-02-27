@@ -16,6 +16,18 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
+const apiKey = process.env.ethApiKey;
 module.exports = {
   solidity: "0.8.4",
+  networks: {
+    hardhat: {
+      forking: {
+        url: `https://eth-mainnet.alchemyapi.io/v2/${apiKey}`, //Mainnet Forking
+        blockNumber: 14288264,
+      },
+    },
+  },
+  mocha: {
+    timeout: 10000 * 1000, // 10,000 seconds
+  },
 };
