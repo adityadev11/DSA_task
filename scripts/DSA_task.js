@@ -39,31 +39,30 @@ async function getCurrentGasPrices() {
 }
 async function Build() {
   const Prices = await getCurrentGasPrices();
-  const gasPrice = Prices.low;
-  console.log(gasPrice);
+  const Gas = Prices.low;
+  console.log(Gas);
   await dsa
     .build({
-      gasPrice: gasPrice,
+      gasPrice: Gas, // estimated gas price
     })
     .then(console.log);
 }
 
 Build();
+// const address = "0xB4Ee861482814c4Bb1c6a649aF77Bd78DbDBf59B";
+// dsa.getAccounts(address).then(console.log);
 
-const address = "0xB4Ee861482814c4Bb1c6a649aF77Bd78DbDBf59B";
-dsa.getAccounts(address).then(console.log);
+// let spells = dsa.Spell();
 
-let spells = dsa.Spell();
+// spells.add({
+//   connector: "compound",
+//   method: "deposit",
+//   args: [
+//     "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+//     "100000000000000000000", // 100 * 10^18 wei
+//     0,
+//     0,
+//   ],
+// });
 
-spells.add({
-  connector: "compound",
-  method: "deposit",
-  args: [
-    "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-    "100000000000000000000", // 100 * 10^18 wei
-    0,
-    0,
-  ],
-});
-
-spells.cast().then(console.log);
+// spells.cast().then(console.log);
