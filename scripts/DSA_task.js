@@ -1,5 +1,6 @@
 const hre = require("hardhat");
-const Web3 = require("web3");
+//const Web3 = require("web3");
+const { web3 } = require("hardhat");
 const { ethers } = require("hardhat");
 const DSA = require("dsa-connect");
 const axios = require("axios");
@@ -8,11 +9,11 @@ require("dotenv").config();
 const apiKey = process.env.ethApiKey;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
-const web3 = new Web3(
-  new Web3.providers.HttpProvider(
-    `https://eth-mainnet.alchemyapi.io/v2/${apiKey}`
-  )
-);
+// const web3 = new Web3(
+//   new Web3.providers.HttpProvider(
+//     `https://eth-mainnet.alchemyapi.io/v2/${apiKey}`
+//   )
+// );
 
 const dsa = new DSA({
   web3: web3,
@@ -58,7 +59,7 @@ async function Build() {
     }
   });
   const Prices = await getCurrentGasPrices();
-  const Gas = Prices.low;
+  const Gas = Prices.high * 1000000000;
   console.log(Gas);
   await dsa
     .build({
@@ -67,21 +68,28 @@ async function Build() {
     .then(console.log);
 }
 
-Build();
-// const address = "0xB4Ee861482814c4Bb1c6a649aF77Bd78DbDBf59B";
-// dsa.getAccounts(address).then(console.log);
+// async function Cast() {
+//   const address = "0xB4Ee861482814c4Bb1c6a649aF77Bd78DbDBf59B";
+//   await dsa.getAccounts(address).then(console.log);
 
-// let spells = dsa.Spell();
+//   let spells = await dsa.Spell();
 
-// spells.add({
-//   connector: "compound",
-//   method: "deposit",
-//   args: [
-//     "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-//     "100000000000000000000", // 100 * 10^18 wei
-//     0,
-//     0,
-//   ],
-// });
+//   await spells.add({
+//     connector: "compound",
+//     method: "deposit",
+//     args: [
+//       "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+//       "1000000000000000000", // 1 * 10^18 wei (1 Eth)
+//       0,
+//       0,
+//     ],
+//   });
 
-// spells.cast().then(console.log);
+//   await spells.cast().then(console.log);
+// }
+
+async function Execute() {
+  await Build();
+  //await Cast();
+}
+Execute().then(console.log("Done!"));
