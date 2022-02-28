@@ -48,7 +48,7 @@ async function getCurrentGasPrices() {
 async function Build() {
   await hre.network.provider.send("hardhat_setBalance", [
     my_address,
-    ethers.utils.parseEther("10.0").toHexString(),
+    ethers.utils.parseEther("18.0").toHexString(),
   ]);
   //console.log(web3.fromWei(web3.utils.eth.getBalance(my_address)));
   await web3.eth.getBalance(my_address, function (err, result) {
@@ -68,28 +68,54 @@ async function Build() {
     .then(console.log);
 }
 
-// async function Cast() {
-//   const address = "0xB4Ee861482814c4Bb1c6a649aF77Bd78DbDBf59B";
-//   await dsa.getAccounts(address).then(console.log);
+async function Cast() {
+  var myAccounts = await dsa.getAccounts(my_address).then(console.log());
+  var newAccountId = myAccounts[0]["id"];
+  var newAccountAddress = myAccounts[0]["address"];
+  console.log("Addr--", newAccountAddress);
+  console.log(myAccounts, newAccountId);
 
-//   let spells = await dsa.Spell();
+  await dsa.setInstance(myAccounts[0]["id"]);
 
-//   await spells.add({
-//     connector: "compound",
-//     method: "deposit",
-//     args: [
-//       "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-//       "1000000000000000000", // 1 * 10^18 wei (1 Eth)
-//       0,
-//       0,
-//     ],
-//   });
+  const Prices = await getCurrentGasPrices();
+  const Gas = Prices.high * 1000000000;
+  console.log(Gas);
 
-//   await spells.cast().then(console.log);
-// }
+  await hre.network.provider.send("hardhat_setBalance", [
+    newAccountAddress,
+    ethers.utils.parseEther("15.0").toHexString(),
+  ]);
+
+  await web3.eth.getBalance(newAccountAddress, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(web3.utils.fromWei(result, "ether") + " ETH");
+    }
+  });
+
+  let spells = await dsa.Spell();
+
+  await spells.add({
+    connector: "compound",
+    method: "deposit",
+    args: [
+      "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "1000000000000000000", // 1 * 10^18 wei (1 Eth)
+      0,
+      0,
+    ],
+  });
+
+  await spells
+    .cast({
+      gasPrice: Gas,
+    })
+    .then(console.log);
+}
 
 async function Execute() {
   await Build();
-  //await Cast();
+  await Cast();
 }
 Execute().then(console.log("Done!"));
