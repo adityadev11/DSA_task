@@ -50,7 +50,6 @@ async function Build() {
     my_address,
     ethers.utils.parseEther("18.0").toHexString(),
   ]);
-  //console.log(web3.fromWei(web3.utils.eth.getBalance(my_address)));
   await web3.eth.getBalance(my_address, function (err, result) {
     if (err) {
       console.log(err);
@@ -95,7 +94,6 @@ async function Cast() {
   });
 
   let spells = await dsa.Spell();
-
   await spells.add({
     connector: "compound",
     method: "deposit",
@@ -110,6 +108,7 @@ async function Cast() {
   await spells
     .cast({
       gasPrice: Gas,
+      value: "1000000000000000000",
     })
     .then(console.log);
 }
