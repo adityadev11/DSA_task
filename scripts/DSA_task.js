@@ -58,7 +58,7 @@ async function Build() {
     }
   });
   const Prices = await getCurrentGasPrices();
-  const Gas = (Prices.high + 5) * 1000000000;
+  const Gas = Prices.high * 1000000000;
   console.log(Gas);
   await dsa
     .build({
@@ -78,7 +78,7 @@ async function Cast() {
   await dsa.setInstance(myAccounts[0]["id"]);
 
   const Prices = await getCurrentGasPrices();
-  const Gas = (Prices.high + 5) * 1000000000;
+  const Gas = Prices.high * 1000000000;
   console.log(Gas);
 
   await hre.network.provider.send("hardhat_setBalance", [
