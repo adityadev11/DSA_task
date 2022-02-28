@@ -58,11 +58,12 @@ async function Build() {
     }
   });
   const Prices = await getCurrentGasPrices();
-  const Gas = Prices.high * 1000000000;
+  const Gas = (Prices.high + 5) * 1000000000;
   console.log(Gas);
   await dsa
     .build({
       gasPrice: Gas, // estimated gas price
+      version: 2,
     })
     .then(console.log);
 }
@@ -77,7 +78,7 @@ async function Cast() {
   await dsa.setInstance(myAccounts[0]["id"]);
 
   const Prices = await getCurrentGasPrices();
-  const Gas = Prices.high * 1000000000;
+  const Gas = (Prices.high + 5) * 1000000000;
   console.log(Gas);
 
   await hre.network.provider.send("hardhat_setBalance", [
@@ -95,15 +96,26 @@ async function Cast() {
 
   let spells = await dsa.Spell();
   await spells.add({
-    connector: "compound",
+    connector: "COMPOUND-A",
     method: "deposit",
     args: [
-      "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "A",
       "1000000000000000000", // 1 * 10^18 wei (1 Eth)
       0,
       0,
     ],
   });
+  // await spells.add({
+  //   connector: "COMPOUND-A",
+  //   method: "depositRaw",
+  //   args: [
+  //     "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+  //     "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5",  //cEth on mainnet
+  //     "1000000000000000000", // 1 * 10^18 wei (1 Eth)
+  //     0,
+  //     0,
+  //   ],
+  // });
 
   await spells
     .cast({
